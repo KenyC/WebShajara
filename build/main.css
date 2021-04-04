@@ -1,0 +1,38 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#top_panel {
+  display: flex;
+}
+
+#bottom_panel {
+	width: 100%;
+}
+
+textarea {
+	width: 100%;
+	height: 300px;
+	resize: none;
+}
+
+#screen {
+  display: flex;
+  margin-right: 10px;
+}
+
+#toolbox {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+#toolbox input {
+  width: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
