@@ -30,9 +30,3 @@ textarea {
 #toolbox input {
   width: 10px;
 }
-
-.form {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 10px;
-}

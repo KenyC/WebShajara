@@ -22,7 +22,7 @@ Options defaults = {
 
 	.width_edge                =  2,
 
-	.color_edge                =  {255, 255, 0},
+	.color_edge                =  {0, 0, 0},
 	.color_label               =  {255, 0, 0},
 };
 	

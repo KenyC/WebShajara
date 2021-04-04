@@ -2,7 +2,7 @@ H_FILES=$(wildcard src/c/*.h)
 C_FILES=$(wildcard src/c/*.c)
 O_FILES=$(C_FILES:%.c=%.o)
 
-EM_FLAGS=-s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "allocate", "intArrayFromString"]'
+EM_FLAGS=-O2 -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "allocate", "intArrayFromString"]'
 GCC_FLAGS=-g -O0
 # GCC_FLAGS=-O1
 main: build/main.html build/main.js build/main.css

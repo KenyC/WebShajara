@@ -108,7 +108,7 @@ void draw_axes() {
 	// translate(-CENTER_X, -CENTER_Y);
 }
 
-#define PADDING 3
+#define PADDING 0
 void draw_selected_node() {
 	// LOG("Printing axesmak");
 	begin_path();
@@ -143,19 +143,24 @@ TREE
 ***************************************/
 char label_buffer[4];
 void init_main_tree() {
-	init_tree(&tree); // Never freed ; is this a problem? I don't think so
+	init_tree(&tree); // Never freed ; is this a problem? 
+	// I don't think so:
+	//    1. The browser will clean up at the end of the page
+	//    2. No natural freeing point (the page continues running even when none of these functions are)
+	//    3. It's allocated once so build up of memory loss
 	// tree.content_freer = &free;
 
 	sprout(&tree, 0);
-	sprout(&tree, 1);
 	sprout(&tree, 2);
-	sprout(&tree, 3);
+	sprout(&tree, 4);
 
 	int i;
+#ifdef DEBUG
 	FOR_EACH_NODE(i, tree) {
 		sprintf(label_buffer, "%d", i);
 		set_label(&tree, i, label_buffer);
 	}
+#endif
 
 	compute_bounding_boxes_from_label_extents(&tree);
 	compute_positions(&tree, tree_root);
