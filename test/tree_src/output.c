@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "tree.h"
+#include "tree_output.h"
 
 #include "output.h"
 
@@ -27,7 +28,11 @@ void print_output() {
 		display(&tree);
 
 		printf("QTree output\n");
-		char *string = output_qtree(&tree, NULL);
+		char* string = output_qtree(&tree, NULL);
+		printf("%s\n", string);
+
+		printf("Forest output\n");
+		string = output_forest(&tree, string);
 		printf("%s\n", string);
 
 		free(string);

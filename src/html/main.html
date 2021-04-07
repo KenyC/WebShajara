@@ -39,6 +39,10 @@
       </div>
 
       <div id="bottom_panel">
+        <select name="formats" id="formats" onchange="alert(document.getElementById('formats').value);">
+          <option value="1">QTree</option>
+          <option value="2">Forest</option>
+        </select>
         <input type="button" name="copy" onclick="copy_text_area()" value="Copy!"><br>
         <textarea id="text_output">Tree will display here when loaded...</textarea>
       </div>

@@ -11,15 +11,14 @@ void init_text_output() {
 
 void set_text_output_content(const char* string) {
 	EM_ASM({
-		var view =  Module.HEAPU8.subarray($0, $0 + $1);
-		var string = '';
-		for (let i = 0; i < $1; i++) {
-		  string += String.fromCharCode(view[i]);
-		}
-		text_output.value = string;
+		// var view =  Module.HEAPU8.subarray($0, $0 + $1);
+		// var string = '';
+		// for (let i = 0; i < $1; i++) {
+		//   string += String.fromCharCode(view[i]);
+		// }
+		text_output.value = UTF8ToString($0);
 	}, 
-		string, 
-		strlen(string)
+		string
 	);	
 }
 

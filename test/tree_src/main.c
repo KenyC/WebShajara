@@ -11,7 +11,8 @@
 #include "output.h"
 #include "sprouts_and_deletes.h"
 
-#define FUNCTION_TO_TEST problematic_tree
+// #define FUNCTION_TO_TEST problematic_tree
+#define FUNCTION_TO_TEST print_output
 
 
 char buffer[256];

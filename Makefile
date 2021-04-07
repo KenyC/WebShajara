@@ -25,8 +25,8 @@ rebuild: clean build/main.html
 ############  TEST ###################################
 TEST_TREE_H_FILES=$(wildcard test/tree_src/*.h)
 TEST_TREE_C_FILES=$(wildcard test/tree_src/*.c)
-FILES_TO_TEST=tree.c geometry.c
-TEST_TREE_O_FILES=$(TEST_TREE_C_FILES:%.c=%.o) test/build/tree.o test/build/geometry.o
+FILES_TO_TEST=tree.c geometry.c tree_output.c
+TEST_TREE_O_FILES=$(TEST_TREE_C_FILES:%.c=%.o) test/build/tree.o test/build/tree_output.o test/build/geometry.o
 TEST_TREE_FLAGS=-Isrc/c/
 test/tree_src/%.o: test/tree_src/%.c $(TEST_TREE_H_FILES)
 	gcc $(GCC_FLAGS) $(TEST_TREE_FLAGS) -c $< -o $@

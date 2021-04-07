@@ -87,14 +87,6 @@ int sprout(Tree *tree, int node);
 #define is_leaf(tree, node_index)      ((tree).n_children[node_index] == 0)
 int find_nodes_near(Tree*, point_t, double radius);
 
-/**************************************
-OUTPUT METHODS
-***************************************/
-/*
-These output methods contain pointers to buffer with the string version of the tree
-Will return "string_buffer" if enough space in "string_buffer"; otherwise reallocates
-*/
-char* output_qtree(const Tree* tree, char *string_buffer);
 
 
 /**************************************

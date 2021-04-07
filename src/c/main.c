@@ -9,6 +9,7 @@
 #include "text_output.h"
 //
 #include "tree.h"
+#include "tree_output.h"
 //
 #include "geometry.h"
 #include "types.h"
@@ -17,6 +18,7 @@
 //
 #include "canvas_mouse_event.h"
 #include "label_event.h"
+#include "dropdown_event.h"
 
 /**************************************
 GLOBAL VARIABLES
@@ -36,6 +38,7 @@ transform_t transform = {
 Tree tree;
 point_t tree_root = {ROOT_X, ROOT_Y};
 int selected_node = 0;
+output_t output_function = &output_qtree;
 
 #define TEXT_OUTPUT_BUFFER_INITIAL_SIZE 200
 char *text_output_buffer; // Store the string form content of the tree
@@ -56,7 +59,7 @@ int main() {
 
 	init_context();     // Init canvas
 	init_text_output(); // Init the area where the string representation of the tree is displayed
-	
+
 	init_main_tree();
 
 	// Not free'd at the end of progrem
@@ -64,6 +67,7 @@ int main() {
 
 	init_canvas_mouse_events(&transform, &tree, tree_root, &selected_node);
 	init_label_events(&tree, &selected_node, tree_root);
+	init_dropdown_events(&output_function);
 
 
 	UPDATE_ALL();
@@ -75,7 +79,7 @@ int main() {
 DRAW
 ***************************************/
 void update_output() {
-	text_output_buffer = output_qtree(&tree, text_output_buffer);
+	text_output_buffer = output_function(&tree, text_output_buffer);
 	set_text_output_content(text_output_buffer);
 }
 

@@ -74,17 +74,13 @@ void rectangle(
 
 void fill_text(const char* string, point_t position) {
 	EM_ASM({
-			var view =  Module.HEAPU8.subarray($0, $0 + $1);
-			var string = '';
-			for (let i = 0; i < $1; i++) {
-			  string += String.fromCharCode(view[i]);
-			}
+			var string = UTF8ToString($0);
 			label_extent = context.measureText(string);
 
-			context.fillText(string, $2, $3)
+			context.fillText(string, $1, $2)
 		}, 
 		string, 
-		strlen(string),
+		// strlen(string),
 		position.x,
 		position.y
 	);
@@ -208,15 +204,9 @@ void draw_line(double x1, double y1, double x2, double y2) {
 point_t get_extent(const char* string) {
 	point_t to_return;
 	EM_ASM({
-			var view =  Module.HEAPU8.subarray($0, $0 + $1);
-			var string = '';
-			for (let i = 0; i < $1; i++) {
-			  string += String.fromCharCode(view[i]);
-			}
-			label_extent = context.measureText(string);
+			label_extent = context.measureText(UTF8ToString($0));
 		}, 
-		string, 
-		strlen(string)
+		string
 	);
 
 	to_return.x = EM_ASM_DOUBLE({return label_extent.width; });

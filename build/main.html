@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="main.css">
-    <title>Emscripten-Generated Code</title>
+    <title>Shajara - Web Edition</title>
   </head>
   <body>
 
@@ -30,7 +30,7 @@
               <li>Click and drag display</li>
               <li>Click on leaf to create two daughters</li>
               <li>Click on inner node to create new parent and left sister</li>
-              <li>Shift+Click on node to select label</li>
+              <li>Ctrl+Click on node to select label</li>
               <li>Click "Set" to give label to currently selected node</li>
               <li>Alt+Click on node to remove all node descendants</li>
             </ul>
@@ -39,6 +39,10 @@
       </div>
 
       <div id="bottom_panel">
+        <select name="formats" id="formats" onchange="_dropdownlist_change_callback(Number(document.getElementById('formats').value));">
+          <option value="1">QTree</option>
+          <option value="2">Forest</option>
+        </select>
         <input type="button" name="copy" onclick="copy_text_area()" value="Copy!"><br>
         <textarea id="text_output">Tree will display here when loaded...</textarea>
       </div>
