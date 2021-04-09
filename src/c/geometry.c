@@ -3,8 +3,6 @@
 transform_t invert(const transform_t* original) {
 	transform_t to_return;
 
-	to_return.translation_x = - original->translation_x;
-	to_return.translation_y = - original->translation_y;
 
 	double determiner;
 	determiner = original->rotation_scale_11 * original->rotation_scale_22
@@ -14,6 +12,15 @@ transform_t invert(const transform_t* original) {
 	to_return.rotation_scale_12 = - original->rotation_scale_12 / determiner; 
 	to_return.rotation_scale_21 = - original->rotation_scale_21 / determiner; 
 	to_return.rotation_scale_22 =   original->rotation_scale_11 / determiner;
+
+	to_return.translation_x = - (
+		original->translation_x * to_return.rotation_scale_11 +
+		original->translation_y * to_return.rotation_scale_12
+	);
+	to_return.translation_y = - (
+		original->translation_x * to_return.rotation_scale_21 +
+		original->translation_y * to_return.rotation_scale_22
+	);
 
 	return to_return;
 }

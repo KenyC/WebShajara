@@ -56,10 +56,22 @@ void init_canvas_mouse_events(
 		"Couldn't set canvas mouse leave callback\n"
 	) 
 
+
+	// ZOOM BUTTONS
+	CATCH_CALLBACK(
+		emscripten_set_mousedown_callback("#zoom_in", NULL, 0, &zoom_in_callback),
+		"Couldn't set zoom in mouse down callback\n"
+	) 
+
+	CATCH_CALLBACK(
+		emscripten_set_mousedown_callback("#zoom_out", NULL, 0, &zoom_out_callback),
+		"Couldn't set zoom in mouse down callback\n"
+	) 
+
 }
 
 /**************************************
-CALLBACKS
+CANVAS CALLBACKS
 ***************************************/
 
 
@@ -120,13 +132,13 @@ EM_BOOL canvas_mousemove_callback(int event_type, const EmscriptenMouseEvent *mo
 		// transform.translation_x += 10;
 		current_transform -> translation_x = 
 			last_translate.x -
-			last_invert_transform.rotation_scale_11 * delta_mouse.x +
-			last_invert_transform.rotation_scale_12 * delta_mouse.y
+			/* last_invert_transform.rotation_scale_11 * */ delta_mouse.x  /* +
+			 last_invert_transform.rotation_scale_12 *  delta_mouse.y */
 		;
 		current_transform -> translation_y = 
-			last_translate.y -
-			last_invert_transform.rotation_scale_21 * delta_mouse.x +
-			last_invert_transform.rotation_scale_22 * delta_mouse.y
+			last_translate.y /* -
+			 last_invert_transform.rotation_scale_21 *  delta_mouse.x */ +
+			/* last_invert_transform.rotation_scale_22 * */ delta_mouse.y
 		;
 
 		update_canvas();
@@ -144,4 +156,31 @@ EM_BOOL canvas_mouseleave_callback (int event_type, const EmscriptenMouseEvent *
 EM_BOOL canvas_mouseup_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data) {
 	pan_view = 0;
 	return 1;
+}
+
+
+/**************************************
+ZOOM CALLBACKS
+***************************************/
+#define ZOOM_FACTOR 1.2
+EM_BOOL zoom_in_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data) {
+	current_transform -> rotation_scale_22 *= ZOOM_FACTOR;
+	current_transform -> rotation_scale_12 *= ZOOM_FACTOR;
+	current_transform -> rotation_scale_21 *= ZOOM_FACTOR;
+	current_transform -> rotation_scale_11 *= ZOOM_FACTOR;
+
+	update_canvas();
+	return 1;
+
+}
+
+EM_BOOL zoom_out_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data) {
+	current_transform -> rotation_scale_22 /= ZOOM_FACTOR;
+	current_transform -> rotation_scale_12 /= ZOOM_FACTOR;
+	current_transform -> rotation_scale_21 /= ZOOM_FACTOR;
+	current_transform -> rotation_scale_11 /= ZOOM_FACTOR;
+
+	update_canvas();
+	return 1;
+
 }

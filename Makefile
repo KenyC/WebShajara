@@ -22,7 +22,7 @@ rebuild: clean build/main.html
 	emcc -c $< $(EM_FLAGS) -o $@
 
 
-############  TEST ###################################
+############  TEST TREE ###################################
 TEST_TREE_H_FILES=$(wildcard test/tree_src/*.h)
 TEST_TREE_C_FILES=$(wildcard test/tree_src/*.c)
 FILES_TO_TEST=tree.c geometry.c tree_output.c
@@ -40,10 +40,32 @@ test/tree_src/cairo_canvas.o: test/tree_src/cairo_canvas.c $(TEST_TREE_H_FILES)
 test/tree: $(TEST_TREE_O_FILES)  
 	gcc $(GCC_FLAGS) $(TEST_TREE_O_FILES) -o $@ -l cairo
 
-
-
 test_tree: test/tree
 	valgrind --leak-check=yes $<
+
+
+############  TEST GEOMETRY ###################################
+TEST_GEOMETRY_H_FILES=$(wildcard test/geometry_src/*.h)
+TEST_GEOMETRY_C_FILES=$(wildcard test/geometry_src/*.c)
+FILES_TO_TEST=geometry.c
+TEST_GEOMETRY_O_FILES=$(TEST_GEOMETRY_C_FILES:%.c=%.o) test/build/geometry.o
+TEST_GEOMETRY_FLAGS=-Isrc/c/
+test/geometry_src/%.o: test/geometry_src/%.c $(TEST_GEOMETRY_H_FILES)
+	gcc $(GCC_FLAGS) $(TEST_GEOMETRY_FLAGS) -c $< -o $@
+
+test/build/%.o: src/c/%.c
+	gcc $(GCC_FLAGS) $(TEST_GEOMETRY_FLAGS) -c $< -o $@
+
+test/geometry_src/cairo_canvas.o: test/geometry_src/cairo_canvas.c $(TEST_GEOMETRY_H_FILES)
+	gcc $(GCC_FLAGS) $(TEST_GEOMETRY_FLAGS) -c $< -o $@ -I/usr/include/cairo/ 
+
+test/geometry: $(TEST_GEOMETRY_O_FILES)  
+	gcc $(GCC_FLAGS) $(TEST_GEOMETRY_O_FILES) -o $@ -l cairo
+
+test_geometry: test/tree
+	valgrind --leak-check=yes $<
+
+
 
 ##########################################################
 

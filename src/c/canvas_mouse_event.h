@@ -19,5 +19,7 @@ EM_BOOL canvas_mouseup_callback(int event_type, const EmscriptenMouseEvent *mous
 EM_BOOL canvas_mousemove_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data);
 EM_BOOL canvas_mouseleave_callback (int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data);
 
+EM_BOOL zoom_in_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data);
+EM_BOOL zoom_out_callback(int event_type, const EmscriptenMouseEvent *mouse_event, void *user_data);
 
 #endif

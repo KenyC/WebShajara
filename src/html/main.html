@@ -13,8 +13,8 @@
           <canvas id="main_canvas" class="test_canvas" width="500" height="400" style="border:1px solid #000000;">
           </canvas> 
           <div id="toolbox">
-            <input type="button" name="plus"  value="+">
-            <input type="button" name="minus" value="-">
+            <input type="button" name="plus" id="zoom_in" value="+">
+            <input type="button" name="minus" id="zoom_out" value="-">
           </div>
         </div>
         <div class="menu">
@@ -39,7 +39,7 @@
       </div>
 
       <div id="bottom_panel">
-        <select name="formats" id="formats" onchange="alert(document.getElementById('formats').value);">
+        <select name="formats" id="formats" onchange="_dropdownlist_change_callback(Number(document.getElementById('formats').value));">
           <option value="1">QTree</option>
           <option value="2">Forest</option>
         </select>

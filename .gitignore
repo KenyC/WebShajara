@@ -1,6 +1,8 @@
+upload_to_site.sh
+environment.sh
+
 # Prerequisites
 *.d
-environment.sh
 
 # Object files
 *.o
