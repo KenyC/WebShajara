@@ -107,12 +107,16 @@ EM_BOOL canvas_mousedown_callback(int event_type, const EmscriptenMouseEvent *mo
 			}
 			else {
 				LOG("sprout");
-				sprout(tree, maybe_selected_node);
-
-				//-- Node indices were changed, selected node must also be changed if it follow the insertion site
+				
+				//-- Node indices will be changed, selected node must also be changed if it follow the insertion site
 				if(!is_leaf(*tree, maybe_selected_node) && (*selected_node > maybe_selected_node)) {
 					(*selected_node)++;
 				}
+
+				display(tree);
+				sprout(tree, maybe_selected_node);
+				display(tree);
+
 				compute_positions(tree, tree_root);
 				UPDATE_ALL();
 			}

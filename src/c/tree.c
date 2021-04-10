@@ -348,13 +348,21 @@ void set_label(Tree* tree, int node_index, char* label) {
 }
 
 int find_nodes_near(Tree* tree, point_t point, double radius) {
-	radius *= radius; // sq radius to avoid computing square root in distances
+	// radius *= radius; // sq radius to avoid computing square root in distances
 	int i;
-	double quadrance_dist;
+	// double manhattan_dist;
 	FOR_EACH_NODE(i, *tree) {
-		quadrance_dist = quadrance(point, tree -> positions[i]);
-		if(quadrance_dist < radius) {
-			printf("%f\n", quadrance_dist);
+		// manhattan_dist = 
+		//    ABS(point.x - tree->positions[i].x) +
+		//    ABS(point.x - tree->positions[i].x);
+		//     tree -> positions[i]);
+		if(
+			(point.x > (tree->positions[i].x - tree->node_bounding_boxes[i].x/2 - radius)) && 
+			(point.x < (tree->positions[i].x + tree->node_bounding_boxes[i].x/2 + radius)) && 
+			(point.y > (tree->positions[i].y - radius))                                    && 
+			(point.y < (tree->positions[i].y + tree->node_bounding_boxes[i].y + radius))   
+		) {
+			// printf("%f\n", manhattan_dist);
 			return i;
 		}
 	}

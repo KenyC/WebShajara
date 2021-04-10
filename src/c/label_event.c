@@ -40,6 +40,11 @@ EM_BOOL label_mousedown_callback(
 	const EmscriptenMouseEvent *mouse_event, 
 	void *user_data
 ) {
+	set_label_callback();
+	return 1;
+}
+
+void EMSCRIPTEN_KEEPALIVE set_label_callback() {
 	char* label = (char*) EM_ASM_INT({
 		var ptr    = allocate(
 			intArrayFromString(document.getElementById("label").value), 
@@ -55,5 +60,4 @@ EM_BOOL label_mousedown_callback(
 	UPDATE_ALL();
 
 	free(label);
-	return 1;
 }
