@@ -159,3 +159,11 @@ void problematic_tree() {
 
 	}))
 }
+
+void add_child_test() {
+	WITH_TREE(tree,({
+		add_child(&tree, 0);
+		sprout(&tree, 1);
+		display(&tree);
+	}))
+}

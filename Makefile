@@ -2,9 +2,11 @@ H_FILES=$(wildcard src/c/*.h)
 C_FILES=$(wildcard src/c/*.c)
 O_FILES=$(C_FILES:%.c=%.o)
 
-EM_FLAGS=-O2 -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "allocate", "intArrayFromString"]'
-GCC_FLAGS=-g -O0
+EM_FLAGS=-O2 -DWEB -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "allocate", "intArrayFromString"]'
+EM_FLAGS+= -DDEBUG
+GCC_FLAGS=-g -O0 -DDEBUG
 # GCC_FLAGS=-O1
+
 main: build/main.html build/main.js build/main.css
 
 
@@ -25,8 +27,8 @@ rebuild: clean build/main.html
 ############  TEST TREE ###################################
 TEST_TREE_H_FILES=$(wildcard test/tree_src/*.h)
 TEST_TREE_C_FILES=$(wildcard test/tree_src/*.c)
-FILES_TO_TEST=tree.c geometry.c tree_output.c
-TEST_TREE_O_FILES=$(TEST_TREE_C_FILES:%.c=%.o) test/build/tree.o test/build/tree_output.o test/build/geometry.o
+FILES_TO_TEST_TREE=tree.c  tree_output.c tree_parse.c geometry.c
+TEST_TREE_O_FILES=$(TEST_TREE_C_FILES:%.c=%.o) $(FILES_TO_TEST_TREE:%.c=test/build/%.o)
 TEST_TREE_FLAGS=-Isrc/c/
 test/tree_src/%.o: test/tree_src/%.c $(TEST_TREE_H_FILES)
 	gcc $(GCC_FLAGS) $(TEST_TREE_FLAGS) -c $< -o $@
@@ -36,6 +38,13 @@ test/build/%.o: src/c/%.c
 
 test/tree_src/cairo_canvas.o: test/tree_src/cairo_canvas.c $(TEST_TREE_H_FILES)
 	gcc $(GCC_FLAGS) $(TEST_TREE_FLAGS) -c $< -o $@ -I/usr/include/cairo/ 
+
+test/tree_src/data/%.txt: test/tree_src/data/%
+	python scripts/sanitize_tree.py $<
+
+DATA_FILES=$(wildcard test/tree_src/data/*.data)
+test/tree_src/output.o: test/tree_src/output.c $(TEST_TREE_H_FILES) $(DATA_FILES:%=%.txt)
+	gcc $(GCC_FLAGS) $(TEST_TREE_FLAGS) -c $< -o $@ 
 
 test/tree: $(TEST_TREE_O_FILES)  
 	gcc $(GCC_FLAGS) $(TEST_TREE_O_FILES) -o $@ -l cairo
@@ -47,8 +56,8 @@ test_tree: test/tree
 ############  TEST GEOMETRY ###################################
 TEST_GEOMETRY_H_FILES=$(wildcard test/geometry_src/*.h)
 TEST_GEOMETRY_C_FILES=$(wildcard test/geometry_src/*.c)
-FILES_TO_TEST=geometry.c
-TEST_GEOMETRY_O_FILES=$(TEST_GEOMETRY_C_FILES:%.c=%.o) test/build/geometry.o
+FILES_TO_TEST_GEOMETRY=geometry.c
+TEST_GEOMETRY_O_FILES=$(TEST_GEOMETRY_C_FILES:%.c=%.o) $(FILES_TO_TEST_GEOMETRY:%.c=test/build/%.o)
 TEST_GEOMETRY_FLAGS=-Isrc/c/
 test/geometry_src/%.o: test/geometry_src/%.c $(TEST_GEOMETRY_H_FILES)
 	gcc $(GCC_FLAGS) $(TEST_GEOMETRY_FLAGS) -c $< -o $@
@@ -70,7 +79,7 @@ test_geometry: test/tree
 ##########################################################
 
 view:
-	firefox build/main.html
+	firefox http://0.0.0.0:8000/build/main.html
 
 emsdk:
 	@echo Run "source ~/Programs/emsdk/emsdk_env.sh"

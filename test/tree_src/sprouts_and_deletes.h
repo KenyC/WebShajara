@@ -8,6 +8,8 @@ void delete_tree               ();
 void test_create_node_at       ();
 void test_inner_sprout         ();
 void problematic_tree          ();
+void add_child_test            ();
+
 
 
 #endif

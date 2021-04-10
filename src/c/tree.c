@@ -6,6 +6,7 @@
 #include "canvas.h"
 #include "tree.h"
 #include "utils.h"
+#include "log.h"
 
 /**************************************
 OPTIONS
@@ -115,6 +116,14 @@ void make_more_space_nodes(Tree* tree) {
 }
 
 
+void make_more_space_children(Tree* tree, int node) {
+	printf("tree.c (l. 72) : Making more spaces\n");
+	REALLOC(
+		tree -> children[node], 
+		tree -> size_memory_children[node] += SIZE_CHILDREN_INCREMENT,
+		int
+	);
+}
 
 
 
@@ -270,7 +279,7 @@ void trim(Tree* tree) {
 }
 
 int sprout(Tree *tree, int node) {
-	if(node >= tree->n_nodes || node < 0) {
+	if(!in_tree(*tree, node)) {
 		return -1;
 	}
 
@@ -301,20 +310,41 @@ int sprout(Tree *tree, int node) {
 		tree -> children[node][0] = create_node(tree);
 		tree -> children[node][1] = node + 1;
 		tree -> n_children[node]  = 2;
+		tree -> node_bounding_boxes[node].x = 0;
+		tree -> node_bounding_boxes[node].y = 0;
 
 		return 0;
 	}
 }
 
+int add_child(Tree *tree, int node) {
+	if(!in_tree(*tree, node)) {
+		return -1;
+	}
+	int node_child = create_node(tree);
+	// increment number of children, if more space needed, make more space
+	if((++(tree -> n_children[node])) > tree -> size_memory_children[node]) {
+		make_more_space_children(tree, node);
+	}
+
+	tree -> children[node][tree -> n_children[node] - 1] = node_child;
+	return node_child;
+}
 
 
 void set_label(Tree* tree, int node_index, char* label) {
-	REALLOC(
-		tree -> labels[node_index], 
-		MAX(strlen(label) + 1, MIN_LABEL_LENGTH), 
-		char
-	);
-	strcpy(tree -> labels[node_index], label);
+	if(label[0] != '\0') {
+		REALLOC(
+			tree -> labels[node_index], 
+			MAX(strlen(label) + 1, MIN_LABEL_LENGTH), 
+			char
+		);
+		strcpy(tree -> labels[node_index], label);
+	}
+	else if(tree -> labels[node_index] != NULL) {
+		free(tree -> labels[node_index]);
+		tree -> labels[node_index] = NULL;
+	}
 }
 
 int find_nodes_near(Tree* tree, point_t point, double radius) {
@@ -331,6 +361,34 @@ int find_nodes_near(Tree* tree, point_t point, double radius) {
 	return -1;
 }
 
+void move_tree(Tree* destination, Tree* source) {
+	// STEP 1: clear residual data from destination tree
+	destroy_tree(destination);
+
+	// STEP 2: move all the pointers from one structure to the other
+	destination -> size_memory_children = source -> size_memory_children;
+	destination -> size_memory_nodes    = source -> size_memory_nodes;
+
+	destination -> n_nodes    = source -> n_nodes;
+	destination -> n_children = source -> n_children;
+	destination -> children   = source -> children;
+
+	destination -> positions             = source -> positions;
+	destination -> node_bounding_boxes   = source -> node_bounding_boxes;
+
+	destination -> labels   = source -> labels;
+
+	// STEP 2: nullify all the pointers from source (so that it can be destroyed safely)
+	source -> size_memory_children = NULL;
+	source -> n_children           = NULL;
+	source -> children             = NULL;
+	source -> node_bounding_boxes  = NULL;
+	source -> positions            = NULL;
+	source -> labels               = NULL;
+	// and nullify size_memory attributes so that "destroy_tree" is vacuous
+	source -> size_memory_nodes = 0;
+	source -> n_nodes           = 0;
+}
 
 
 
@@ -474,13 +532,19 @@ void draw_tree(const Tree* tree) {
 
 void display_aux(Tree* tree, int node, int tabulation) {
 	int i;
-	char* content;
+	// char* content;
+	// LOG("efezfez\n");
 	for (i = 0; i < tabulation; ++i)
 	{
-		printf("\t");
+		LOG("\t");
 	}
-	content = (tree -> labels[node] != NULL) ? tree -> labels[node] : "*";
-	printf("%s\n", content);
+	if(tree -> labels[node] != NULL) {
+		LOG("%d[%s]\n", node, tree -> labels[node]);
+	}
+	else {
+		LOG("%d\n", node);
+	}
+	// content = (tree -> labels[node] != NULL) ? tree -> labels[node] : "*";
 
 	FOR_EACH_CHILD(i, *tree, node)
 	{

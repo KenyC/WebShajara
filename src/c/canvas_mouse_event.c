@@ -89,17 +89,30 @@ EM_BOOL canvas_mousedown_callback(int event_type, const EmscriptenMouseEvent *mo
 			if(mouse_event -> ctrlKey) {
 				LOG("select node");
 				*selected_node = maybe_selected_node;
+				EM_ASM({
+					var label = document.getElementById("label");
+					label.select();
+					label.focus();
+				});
 				update_canvas();
 			}
 			else if(mouse_event -> altKey) {
 				LOG("delete node");
 				delete_node(tree, maybe_selected_node);
+				if(*selected_node >= tree -> n_nodes) {
+					*selected_node = 0;
+				}
 				compute_positions(tree, tree_root);
 				UPDATE_ALL();
 			}
 			else {
 				LOG("sprout");
 				sprout(tree, maybe_selected_node);
+
+				//-- Node indices were changed, selected node must also be changed if it follow the insertion site
+				if(!is_leaf(*tree, maybe_selected_node) && (*selected_node > maybe_selected_node)) {
+					(*selected_node)++;
+				}
 				compute_positions(tree, tree_root);
 				UPDATE_ALL();
 			}

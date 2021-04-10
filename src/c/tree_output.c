@@ -143,11 +143,13 @@ FOREST OUTPUT
 ***************************************/
 
 // Constants
-#define FOREST_HEADER_SIZE           15
-#define FOREST_FOOTER_SIZE           13
-#define FOREST_INNER_NODE_NUM_CHARS  4
-#define FOREST_LEAF_NODE_NUM_CHARS   3
-#define FOREST_TABULATION_SIZE       3
+#define FOREST_HEADER_SIZE                 15
+#define FOREST_FOOTER_SIZE                 13
+#define FOREST_INNER_NODE_NUM_CHARS        6
+#define FOREST_LEAF_NODE_NUM_CHARS         5
+#define FOREST_EMPTY_INNER_NODE_NUM_CHARS  4
+#define FOREST_EMPTY_LEAF_NODE_NUM_CHARS   3
+#define FOREST_TABULATION_SIZE             3
 char forest_tabulation_string[FOREST_TABULATION_SIZE+1] = "   ";
 char forest_header[FOREST_HEADER_SIZE+1] = "\\begin{forest}\n";
 char forest_footer[FOREST_FOOTER_SIZE+1] = "\\end{forest}\n";
@@ -169,12 +171,20 @@ char* output_forest_aux(
 	}
 	if(is_leaf(*tree, current_node)) {
 		APPEND(current_char, '[');
-		PRINT_LABEL(tree, current_node, current_char);
+		if(tree -> labels[current_node] != NULL) {
+			APPEND(current_char, '{');
+			PRINT_LABEL(tree, current_node, current_char);
+			APPEND(current_char, '}');
+		} 
 		APPEND_STRING(current_char, "]\n");
 	}
 	else {
-		APPEND_STRING(current_char, "[");
-		PRINT_LABEL(tree, current_node, current_char);
+		APPEND(current_char, '[');
+		if(tree -> labels[current_node] != NULL) {
+			APPEND(current_char, '{');
+			PRINT_LABEL(tree, current_node, current_char);
+			APPEND(current_char, '}');
+		}
 		APPEND(current_char, '\n');
 
 		int i;

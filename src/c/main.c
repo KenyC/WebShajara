@@ -18,6 +18,7 @@
 //
 #include "canvas_mouse_event.h"
 #include "label_event.h"
+#include "import_event.h"
 #include "dropdown_event.h"
 
 /**************************************
@@ -39,13 +40,14 @@ Tree tree;
 point_t tree_root = {ROOT_X, ROOT_Y};
 int selected_node = 0;
 output_t output_function = &output_qtree;
+parse_t  parse_function  = &parse_qtree;
 
 #define TEXT_OUTPUT_BUFFER_INITIAL_SIZE 200
 char *text_output_buffer; // Store the string form content of the tree
 
-void dummy_log(char* string) {
-	LOG("%s\n", string);
-}
+// void dummy_log(char* string) {
+// 	LOG("%s\n", string);
+// }
 
 
 /**************************************
@@ -67,7 +69,8 @@ int main() {
 
 	init_canvas_mouse_events(&transform, &tree, tree_root, &selected_node);
 	init_label_events(&tree, &selected_node, tree_root);
-	init_dropdown_events(&output_function);
+	init_dropdown_events(&output_function, &parse_function);
+	init_import_events(&parse_function, &tree, &tree_root, &selected_node);
 
 
 	UPDATE_ALL();

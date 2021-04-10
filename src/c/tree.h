@@ -11,6 +11,7 @@ CONSTANTS
 
 #define INITIAL_NUMBER_NODES    128
 #define SIZE_NODES_INCREMENT    16
+#define SIZE_CHILDREN_INCREMENT 3
 #define INITIAL_NUMBER_CHILDREN 3
 #define MIN_LABEL_LENGTH        20
 
@@ -61,9 +62,11 @@ typedef struct {
 MEMORY MANAGEMENT METHODS
 ***************************************/
 
-void init_tree(Tree*);
-void destroy_tree(Tree*);
-void make_more_space_nodes(Tree* tree);
+void init_tree                (Tree*);
+void destroy_tree             (Tree*);
+void make_more_space_nodes    (Tree*);
+void make_more_space_children (Tree*, int node);
+
 #define free_content(tree, node_index)           \
      if(((tree).labels[node_index] != NULL)) {   \
      	free((tree).labels[node_index]);         \
@@ -82,12 +85,15 @@ void set_label(Tree*, int node_index, char*);
 
 void trim(Tree*);
 int sprout(Tree *tree, int node);
+int add_child(Tree *tree, int node);
 
 
 #define is_leaf(tree, node_index)      ((tree).n_children[node_index] == 0)
+#define in_tree(tree, node_index)      (node_index < (tree).n_nodes && node_index >= 0)
 int find_nodes_near(Tree*, point_t, double radius);
 
-
+// Copy the memory of one tree to another ; the source can be destroyed safely
+void move_tree(Tree* destination, Tree* source);
 
 /**************************************
 DISPLAY METHODS

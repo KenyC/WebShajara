@@ -3,6 +3,7 @@
 
 #include "tree.h"
 #include "tree_output.h"
+#include "tree_parse.h"
 
 #include "output.h"
 
@@ -36,6 +37,42 @@ void print_output() {
 		printf("%s\n", string);
 
 		free(string);
+
+	}))
+
+}
+
+char string_qtree[] = 
+#include "data/qtree_tree.data.txt"
+;
+void parse_qtree_test() {
+	WITH_TREE(tree,({
+
+		int error = !parse_qtree(string_qtree, &tree); 
+		if(error) {
+			printf("Error\n");
+		}
+		printf("output.c (l. 55) : displaying tree\n");
+		display(&tree);
+
+
+	}))
+
+}
+
+char string_forest[] = 
+#include "data/forest_tree.data.txt"
+;
+void parse_forest_test() {
+	WITH_TREE(tree,({
+
+		int error = !parse_forest(string_forest, &tree); 
+		if(error) {
+			printf("Error\n");
+		}
+
+		printf("output.c (l. 55) : displaying tree\n");
+		display(&tree);
 
 	}))
 
