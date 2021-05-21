@@ -57,5 +57,7 @@ textarea {
 }
 
 #help_uncollapse {
+  color: inherit;
+  text-decoration: none;
   cursor: pointer;
 }

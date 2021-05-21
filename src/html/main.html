@@ -43,7 +43,7 @@
         <!-- </div> -->
       <div id="help">
         <!-- Report a bug! <br> -->
-        <a id="help_uncollapse">&darr;</a>Help
+        <a id="help_uncollapse"><span id="help_arrow">&darr;</span>Help</a>
         <ul id="help_commands">
           <li>Click and drag display</li>
           <li>Click on leaf to create two daughters</li>
@@ -79,12 +79,15 @@
       var coll = document.getElementById("help_uncollapse");
       coll.addEventListener("click", function() {
           // this.classList.toggle("active");
-          var help = document.getElementById("help_commands");
+          var help  = document.getElementById("help_commands");
+          var arrow = document.getElementById("help_arrow");
           if (help.style.display === "block") {
               help.style.display = "none";
+              arrow.innerHTML = "&darr;";
           } else {
               help.style.display = "block";
               help.scrollIntoView();
+              arrow.innerHTML = "&uarr;";
           }
       });
 
