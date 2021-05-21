@@ -1,6 +1,7 @@
 upload_to_site.sh
 environment.sh
-
+.shake
+build/
 # Prerequisites
 *.d
 
@@ -9,6 +10,7 @@ environment.sh
 *.ko
 *.obj
 *.elf
+*.m
 
 # Linker output
 *.ilk
