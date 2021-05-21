@@ -10,48 +10,51 @@
 
       <div id="top_panel">
         <div id="screen">
-          <canvas id="main_canvas" class="test_canvas" width="600" height="450" style="border:1px solid #000000;">
+          <!-- <canvas id="main_canvas" class="test_canvas" width="600" height="450" style="border:1px solid #000000;"> -->
+          <canvas id="main_canvas" class="test_canvas" width="1000" height="450" style="border:1px solid #000000;">
           </canvas> 
           <div id="toolbox">
             <input type="button" name="plus" id="zoom_in" value="+">
             <input type="button" name="minus" id="zoom_out" value="-">
           </div>
         </div>
-        <div class="menu">
-          <!-- <div class="label_form"> -->
-            <form id="label_form">
-              Node Label:
-              <input type="input"  name="label" id="label">
-              <input type="button" name="set_label" value="Set Label" id="set_label">
-            </form>
-          <!-- </div> -->
-          <div>
-            <!-- Report a bug! <br> -->
-            Help:
-            <ul>
-              <li>Click and drag display</li>
-              <li>Click on leaf to create two daughters</li>
-              <li>Click on inner node to create new parent and left sister</li>
-              <li>Ctrl+Click on node to select label</li>
-              <li>Click "Set Label" or press "Enter" to give label to currently selected node</li>
-              <li>Alt+Click on node to remove all node descendants</li>
-              <li>Paste an existing tree in the text area below and click "Import" to modify it in the graphics editor.</li>
-            </ul>
-          </div>
+
+        <div id="output_panel">
+          Output format:
+          <select name="formats" id="formats" onchange="_dropdownlist_change_callback(Number(document.getElementById('formats').value));">
+            <option value="1">QTree</option>
+            <option value="2">Forest</option>
+          </select>
+          <input type="button" name="copy" onclick="copy_text_area()" value="Copy to clipboard">
+          <input type="button" name="import" id="import" value="Import">
+          <br>
+          <textarea id="text_output">Tree will display here when loaded...</textarea>
         </div>
       </div>
 
-      <div id="bottom_panel">
-        Output format:
-        <select name="formats" id="formats" onchange="_dropdownlist_change_callback(Number(document.getElementById('formats').value));">
-          <option value="1">QTree</option>
-          <option value="2">Forest</option>
-        </select>
-        <input type="button" name="copy" onclick="copy_text_area()" value="Copy to clipboard">
-        <input type="button" name="import" id="import" value="Import">
-        <br>
-        <textarea id="text_output">Tree will display here when loaded...</textarea>
+      <div class="menu">
+        <!-- <div class="label_form"> -->
+          <form id="label_form">
+            Node Label:
+            <input type="input"  name="label" id="label">
+            <input type="button" name="set_label" value="Set Label" id="set_label">
+          </form>
       </div>
+        <!-- </div> -->
+      <div id="help">
+        <!-- Report a bug! <br> -->
+        <a id="help_uncollapse">&darr;</a>Help
+        <ul id="help_commands">
+          <li>Click and drag display</li>
+          <li>Click on leaf to create two daughters</li>
+          <li>Click on inner node to create new parent and left sister</li>
+          <li>Ctrl+Click on node to select label</li>
+          <li>Click "Set Label" or press "Enter" to give label to currently selected node</li>
+          <li>Alt+Click on node to remove all node descendants</li>
+          <li>Paste an existing tree in the text area below and click "Import" to modify it in the graphics editor.</li>
+        </ul>
+      </div>
+
 
     <script async type="text/javascript" src="main.js"></script>
     <script type="text/javascript">
@@ -72,6 +75,19 @@
         _set_label_callback();
       } 
       form.addEventListener('submit', form_set_label);
+
+      var coll = document.getElementById("help_uncollapse");
+      coll.addEventListener("click", function() {
+          // this.classList.toggle("active");
+          var help = document.getElementById("help_commands");
+          if (help.style.display === "block") {
+              help.style.display = "none";
+          } else {
+              help.style.display = "block";
+              help.scrollIntoView();
+          }
+      });
+
     </script>
   </body>
 </html>

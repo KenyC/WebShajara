@@ -14,8 +14,8 @@ void init_context() {
 	EM_ASM({
 		canvas   = document.getElementById("main_canvas");
 		context  = canvas.getContext("2d");
-		context.lineJoin = "round"; 
-		context.font = "#FONT_SIZEpx Arial";
+		context.lineJoin  = "round"; 
+		context.font      = "#FONT_SIZEpx Arial";
 	});
 }
 
@@ -47,7 +47,7 @@ void arc(
 	double end_angle
 ) {
 	EM_ASM(
-		{context.arc($0, $1, $2, $3, $4)},
+		{context.arc($0, $1, $2, $3, $4);},
 		x,
 		y,
 		r,
@@ -63,7 +63,7 @@ void rectangle(
 	double height
 ) {
 	EM_ASM(
-		{context.rect($0, $1, $2, $3)},
+		{context.rect($0, $1, $2, $3);},
 		x,
 		y,
 		width,
@@ -92,6 +92,10 @@ void stroke(){
 	EM_ASM({context.stroke();});
 }
 
+void fill(){
+	EM_ASM({context.fill();});
+}
+
 
 void stroke_width(double width) {
 	EM_ASM(
@@ -105,6 +109,18 @@ void stroke_color(Color color) {
 	
 	EM_ASM(
 		{context.strokeStyle = "rgb(" + String($0) +", " + String($1) + ", " + String($2) + ")";},
+		color.red, color.green, color.blue
+	);
+
+}
+
+
+
+
+void fill_color(Color color) {
+	
+	EM_ASM(
+		{context.fillStyle = "rgb(" + String($0) +", " + String($1) + ", " + String($2) + ")";},
 		color.red, color.green, color.blue
 	);
 

@@ -3,7 +3,7 @@ C_FILES=$(wildcard src/c/*.c)
 O_FILES=$(C_FILES:%.c=%.o)
 
 EM_FLAGS=-O2 -DWEB -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "allocate", "intArrayFromString"]'
-EM_FLAGS+= -DDEBUG
+# EM_FLAGS+= -DDEBUG
 GCC_FLAGS=-g -O0 -DDEBUG
 # GCC_FLAGS=-O1
 

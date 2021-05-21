@@ -26,11 +26,13 @@ void arc(double x, double y, double r, double start_angle, double end_angle);
 void rectangle(double x, double y, double width, double height);
 void fill_text(const char*, point_t);
 void stroke();
+void fill();
 
 
 
 void stroke_width(double width);
-void stroke_color(Color);
+void stroke_color (Color);
+void fill_color   (Color);
 
 
 /**************************************

@@ -25,7 +25,8 @@
 GLOBAL VARIABLES
 ***************************************/
 
-static Color default_color = {0, 0, 0};
+static Color default_color = {0,   0,   0};
+static Color bg_color      = {255, 255, 255};
 
 transform_t transform = {
 	.rotation_scale_11   = 1,
@@ -95,12 +96,13 @@ void update_canvas() {
 
 	// draw_axes();
 
-	begin_path();
-	draw_selected_node();
 
 	begin_path();
+	fill_color(default_color);
 	draw_tree(&tree);
 
+	begin_path();
+	draw_selected_node();
 }
 
 #define SCALE    30
@@ -121,6 +123,7 @@ void draw_selected_node() {
 	begin_path();
 	stroke_color(default_color);
 	if((tree.node_bounding_boxes[selected_node].x + tree.node_bounding_boxes[selected_node].y) < 1e-5) {
+		fill_color(bg_color);
 		arc(
 			tree.positions[selected_node].x, 
 			tree.positions[selected_node].y,
@@ -128,6 +131,7 @@ void draw_selected_node() {
 			0,
 			2 * PI
 		);
+		fill();
 	}
 	else {
 		rectangle(
