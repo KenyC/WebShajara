@@ -8,7 +8,7 @@ GCC_FLAGS=-g -O0 -DDEBUG
 # GCC_FLAGS=-O1
 
 main: build/main.html build/main.js build/main.css
-
+	@echo "This Makefile is deprecated ; use Shakefile instead"
 
 build/%: src/html/%
 	cp -f $< $@  
